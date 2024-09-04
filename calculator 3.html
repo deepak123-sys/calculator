@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+</head>
+<style>
+    body {
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: hsl(0, 0%, 95%);
+    }
+
+    #Calculator {
+        font-family: arial, sans-serif;
+        background-color: hsl(0, 0%, 15%);
+        border-radius: 15px;
+        max-width: 500px;
+        overflow: hidden;
+    }
+
+    #display {
+        width: 100%;
+        padding: 20px;
+        font-size: 5rem;
+        text-align: left;
+        border: none;
+        background-color: hsl(0, 0%, 20%);
+        color: white;
+        overflow: hidden;
+    }
+
+    #keys {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        padding: 25px;
+    }
+
+    button {
+        width: 100px;
+        height: 100px;
+        border-radius: 50px;
+        border: none;
+        background-color: hsl(0, 0%, 30%);
+        color: white;
+        font-size: 3rem;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: hsl(0, 0%, 40%);
+    }
+
+    button:active {
+        background-color: hsl(0, 0%, 50%);
+    }
+
+    .operator1 {
+        background-color: hsl(35, 100%, 55%);
+    }
+
+    .operator1:hover {
+        background-color: hsl(35, 100%, 65%);
+    }
+
+    .operator1:active {
+        background-color: hsl(35, 100%, 75%);
+    }
+</style>
+
+<body>
+    <div id="Calculator">
+        <input id="display" readonly>
+        <div id="keys">
+            <button onclick="getOperator('+')" class="operator1">+</button>
+            <button onclick="getNumber('7')">7</button>
+            <button onclick="getNumber('8')">8</button>
+            <button onclick="getNumber('9')">9</button>
+            <button onclick="getOperator('-')" class="operator1">-</button>
+            <button onclick="getNumber('4')">4</button>
+            <button onclick="getNumber('5')">5</button>
+            <button onclick="getNumber('6')">6</button>
+            <button onclick="getOperator('*')" class="operator1">*</button>
+            <button onclick="getNumber('1')">1</button>
+            <button onclick="getNumber('2')">2</button>
+            <button onclick="getNumber('3')">3</button>
+            <button onclick="getOperator('/')" class="operator1">/</button>
+            <button onclick="getNumber('0')">0</button>
+            <button onclick="getNumber('.')">.</button>
+            <button onclick="calculateEquals()">=</button>
+            <button onclick="clearDisplay()" class="operator1">C</button>
+        </div>
+    </div>
+
+    <script>
+        let firstNumber = '';
+        let secondNumber = '';
+        let currentOperation = '';
+        let result = 0;
+        let display = document.getElementById('display');
+
+        window.onload = function () {
+            display.value = " ";
+        }
+
+        function getNumber(num) {
+            if (currentOperation === '') {
+                firstNumber += num;
+                display.value = firstNumber;
+            } else {
+                secondNumber += num;
+                display.value = firstNumber + ' ' + currentOperation + ' ' + secondNumber;
+            }
+        }
+
+        function getOperator(op) {
+            if (firstNumber === '') return;
+            if (secondNumber !== '') {
+                calculateEquals();
+                firstNumber = result.toString();
+                secondNumber = '';
+            }
+            currentOperation = op;
+            display.value = firstNumber + ' ' + currentOperation;
+        }
+
+        function calculateEquals() {
+            if (firstNumber === '' || currentOperation === '' || secondNumber === '') return;
+            let num1 = parseFloat(firstNumber);
+            let num2 = parseFloat(secondNumber);
+            switch (currentOperation) {
+                
+                case '+':
+                    result = num1 + num2;
+                    break;
+                case '-':
+                    result = num1 - num2;
+                    break;
+                case '*':
+                    result = num1 * num2;
+                    break;
+                case '/':
+                    result = num2 === 0 ? 'Error' : num1 / num2;
+                    break;
+                default:
+                    return;
+            }
+            display.value = result;
+            firstNumber = result.toString();
+            secondNumber = '';
+            currentOperation = '';
+        }
+
+        function clearDisplay() {
+            display.value = 0;
+            firstNumber = '';
+            secondNumber = '';
+            currentOperation = '';
+            result = 0;
+        }
+    </script>
+</body>
+
+</html>
